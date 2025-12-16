@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Fighting : MonoBehaviour
 {
-    [SerializeField] private BoxCollider2D _bc;
+    [SerializeField] private BoxCollider2D attackBox;
     [SerializeField] private Animator anime;
     // Start is called before the first frame update
     void Start()
     {
-        
+        attackBox.enabled = false; 
     }
 
     // Update is called once per frame
@@ -23,11 +23,14 @@ public class Fighting : MonoBehaviour
     }
     void Attack()
     {
+        attackBox.enabled = true;
         anime.SetBool("IsAttacking",true);
-        Debug.Log("Attacked");
+        Debug.Log("attacked");
     }
     void SAttack()
     {
+        attackBox.enabled = false;
         anime.SetBool("IsAttacking",false);
+        Debug.Log("Sattacked");
     }
 }
