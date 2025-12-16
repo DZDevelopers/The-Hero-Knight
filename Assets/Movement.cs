@@ -1,3 +1,5 @@
+using System;
+using UnityEditor.Tilemaps;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
@@ -7,6 +9,8 @@ public class Movement : MonoBehaviour
     [SerializeField]private float jumpStrength = 5f;
     [SerializeField]private float cyoteTime = 0.15f;
     [SerializeField]private float jumpBufferTime = 0.5f;
+    [SerializeField]private Animator anime;
+    private int facingDir = 1;
     private float jumpBufferCounter;
 
     private float cyoteTimeCounter;
@@ -41,18 +45,35 @@ public class Movement : MonoBehaviour
             Jump();
             cyoteTimeCounter = 0f;
         }
-
+        
     }
 
     void FixedUpdate()
     {
         float moveX = Input.GetAxis("Horizontal");
         _rb.velocity = new Vector2(moveX * speed, _rb.velocity.y);
+        float Horizontal =Input.GetAxis("Horizontal");
+        if (Horizontal < 0 && transform.localScale.x > 0)
+        {
+            Flip();
+        }
+        if (Horizontal > 0 && transform.localScale.x < 0)
+        {
+            Flip();
+        }
+        anime.SetFloat("Horizontal", Math.Abs(Input.GetAxis("Horizontal")));
+        anime.SetFloat("Vertical", _rb.velocity.y);
+  
     }
     void Jump()
     {
         _rb.velocity = new Vector2(_rb.velocity.x, 0f);
         _rb.AddForce(Vector2.up * jumpStrength, ForceMode2D.Impulse);
+    }
+    void Flip()
+    {
+        facingDir *= -1;
+        transform.localScale = new Vector2(transform.localScale.x * -1, transform.localScale.y);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
