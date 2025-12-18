@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AttackBox : MonoBehaviour
 {
-    private bool hasHit;
+    public bool hasHit;
     [SerializeField] public int playerDamage =1;
     // Start is called before the first frame update
     void Start()

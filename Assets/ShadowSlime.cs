@@ -11,6 +11,7 @@ public class ShadowSlime : MonoBehaviour
     [SerializeField]private Transform player;
     [SerializeField]private GameObject RPoint;
     [SerializeField]private GameObject LPoint;
+
     private bool playerisinfront;
     private Rigidbody2D rb;
     private int direction = 1; // 1 = right, -1 = left
@@ -46,30 +47,50 @@ public class ShadowSlime : MonoBehaviour
     }
     void Flip()
     {
-        if (transform.position.x >= RPoint.transform.position.x || transform.position.x <= LPoint.transform.position.x)
-        {
-            direction *= -1;
-            Vector3 scale = transform.localScale;
-            scale.x = Mathf.Abs(scale.x) * direction;
-            transform.localScale = scale;
-        }
+        direction *= -1;
+        Vector3 scale = transform.localScale;
+        scale.x = Mathf.Abs(scale.x) * direction;
+        transform.localScale = scale;
+        Debug.Log("Fliped");
     }
     void PlayerInFront()
     {
-        if (Math.Abs(player.position.x - transform.position.x) <= aggroDistance)
+        if (Math.Abs(player.position.x - transform.position.x) >= aggroDistance)
         {
             playerisinfront = false;
-            return;
         }
         else
         {
-            playerisinfront = true;
+            int playerDir;
+            if (player.position.x > transform.position.x)
+            {
+                playerDir = 1;
+            }
+            else
+            {
+                playerDir = -1;
+            }
+            if (playerDir == direction)
+            {
+                playerisinfront = true;
+            }
+            else
+            {
+                playerisinfront = false;
+            }
         }
     }
-    
     void AggroMove()
     {
-        rb.velocity = new Vector2 (aggroSpeed * direction,rb.velocity.y);
+        int playerDir;
+    if (player.position.x > transform.position.x)
+    {  
+        playerDir = 1;
     }
-    
+    else
+    { 
+        playerDir = -1;
+    }
+    rb.velocity = new Vector2(aggroSpeed * playerDir, rb.velocity.y);
+    }
 }

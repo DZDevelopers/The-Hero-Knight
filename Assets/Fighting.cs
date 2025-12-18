@@ -29,10 +29,14 @@ public class Fighting : MonoBehaviour
     }
     
     void Attack()
-    {
-        attackBox.enabled = true;
-        anime.SetBool("IsAttacking",true);
-    }
+{
+    attackBox.enabled = true;
+
+    AttackBox ab = attackBox.GetComponent<AttackBox>();
+    ab.hasHit = false;
+
+    anime.SetBool("IsAttacking", true);
+}
     void SAttack()
     {
         attackBox.enabled = false;
@@ -51,15 +55,13 @@ public class Fighting : MonoBehaviour
         playerHealth -= Enemydamage;
         if (playerHealth <= 0)
         {
+            Debug.Log("Player died");
             if (!playerDead)
             {
             anime.SetBool("Died", true);
             playerDead = true;
-            Vector2 newSize = new Vector2(hitBox.size.x, 0.22f);
-            hitBox.size = newSize;
-            }
-            Invoke(nameof(SDied),1f);
             Invoke(nameof(PDestroy),5f);
+            }
         }
     }
 }
